@@ -132,27 +132,44 @@ router.get('/items', async (req, res) => {
 });
 
 // Update category by ID
+// router.put('/categories/:id', async (req, res) => {
+//     try {
+//       // Update fields directly using findByIdAndUpdate
+//       const updatedCategory = await Category.findByIdAndUpdate(
+//         req.params.id,
+//         req.body, // Use the request body to update fields
+//         { new: true, runValidators: true } // Return the updated document and validate data
+//       );
+  
+//       if (!updatedCategory) {
+//         return res.status(404).json({ message: 'Category not found' });
+//       }
+  
+//       res.json(updatedCategory);
+//     } catch (err) {
+//       console.error('Error updating category:', err.message);
+//       res.status(400).json({ message: err.message });
+//     }
+//   });
 router.put('/categories/:id', async (req, res) => {
     try {
-        console.log("in the update");
         const category = await Category.findById(req.params.id);
-        console.log(category)
         if (!category) {
             return res.status(404).json({ message: 'Category not found' });
-        }   
-
-        // Update the category fields from the request body
-        if (req.body.name) {
-            category. category_title = req.body.name;
         }
+        
+        // Update fields from request body
+        category.category_title = req.body.category_title || category.category_title;
+        category.category_description = req.body.category_description || category.category_description;
+        category.category_icon = req.body.category_icon || category.category_icon;
 
-        // Save the updated category
         const updatedCategory = await category.save();
         res.json(updatedCategory);
     } catch (err) {
         res.status(400).json({ message: err.message });
     }
 });
+
 
 // Delete category by ID
 router.delete('/categories/:id', async (req, res) => {

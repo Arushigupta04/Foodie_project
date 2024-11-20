@@ -1,6 +1,6 @@
 const Payment = require("../models/paymentModel.js");
 const crypto = require("crypto");
-const User = require("../models/user.js");
+// const User = require("../models/user.js");
 const Razorpay = require("razorpay");
 
 const instance = new Razorpay({
@@ -38,8 +38,8 @@ const checkout = async (req, res) => {
 const paymentVerification = async (req, res) => {
   console.log("------------------------start");
   try {
-    const { razorpay_order_id, razorpay_payment_id, razorpay_signature, id ,amount} = req.body;
-    console.log("id is"+id)
+    const { razorpay_order_id, razorpay_payment_id, razorpay_signature,amount} = req.body;
+    // console.log("id is"+id)
     // Generate body for signature verification
     const body = razorpay_order_id + "|" + razorpay_payment_id;
     console.log("Verifying Payment with body:", body);
@@ -63,7 +63,7 @@ const paymentVerification = async (req, res) => {
         razorpay_order_id,
         razorpay_payment_id,
         razorpay_signature,
-        userId:id, 
+        // userId:id, 
         amount
         // Storing the user ID for tracking the user who made the payment
       });

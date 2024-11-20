@@ -1,16 +1,230 @@
+// // import React, { useState, useEffect } from "react";
+// // import "./AllCategories.css"; // Import the custom CSS file
+// // import UpdatePopup from "./UpdatePopup"; // Import the UpdatePopup component
+
+// // const AllCategories = () => {
+// //   const [categories, setCategories] = useState([]);
+// //   const [isLoading, setIsLoading] = useState(true);
+// //   const [selectedCategory, setSelectedCategory] = useState(null);
+
+// //   useEffect(() => {
+// //     const fetchCategories = async () => {
+// //       try {
+// //         const response = await fetch("http://localhost:5000/api/add-new/categories");
+// //         const data = await response.json();
+// //         setCategories(data);
+// //       } catch (error) {
+// //         console.error("Error fetching categories:", error);
+// //       } finally {
+// //         setIsLoading(false);
+// //       }
+// //     };
+
+// //     fetchCategories();
+// //   }, []);
+
+// //   const deleteCategory = async (id) => {
+// //     try {
+// //       await fetch(`http://localhost:5000/api/add-new/categories/${id}`, {
+// //         method: "DELETE",
+// //       });
+// //       setCategories(categories.filter((category) => category._id !== id));
+// //     } catch (error) {
+// //       console.error("Error deleting category:", error);
+// //     }
+// //   };
+
+// //   const updateCategory = async (updatedCategory) => {
+// //     setCategories(
+// //       categories.map((category) =>
+// //         category._id === updatedCategory._id ? updatedCategory : category
+// //       )
+// //     );
+// //     setSelectedCategory(null); // Close the popup after updating
+// //   };
+
+// //   const handleUpdateClick = (category) => {
+// //     setSelectedCategory(category); // Open the update popup with the selected category
+// //   };
+
+// //   if (isLoading) {
+// //     return <div className="loadingI">Loading categories...</div>;
+// //   }
+
+// //   return (
+// //     <div className="containerI">
+// //       <h2 className="titleI">All Categories</h2>
+// //       {categories.length === 0 ? (
+// //         <p className="no-categoriesI">No categories available.</p>
+// //       ) : (
+// //         <div className="gridI">
+// //           {categories.map((category) => (
+// //             <div key={category._id} className="cardI">
+// //               <img
+// //                 src={category.category_icon}
+// //                 alt={category.category_title}
+// //                 className="card-imageI"
+// //               />
+// //               <div className="card-contentI">
+// //                 <h3 className="card-titleI">{category.category_title}</h3>
+// //                 <p className="card-descriptionI">{category.category_description}</p>
+// //                 <div className="card-actionsI">
+// //                   <button
+// //                     onClick={() => handleUpdateClick(category)}
+// //                     className="buttonI update-buttonI"
+// //                   >
+// //                     Update
+// //                   </button>
+// //                   <button
+// //                     onClick={() => deleteCategory(category._id)}
+// //                     className="buttonI delete-buttonI"
+// //                   >
+// //                     Delete
+// //                   </button>
+// //                 </div>
+// //               </div>
+// //             </div>
+// //           ))}
+// //         </div>
+// //       )}
+
+// //       {/* Show UpdatePopup if a category is selected */}
+// //       {selectedCategory && (
+// //         <UpdatePopup
+// //           category={selectedCategory}
+// //           onClose={() => setSelectedCategory(null)} // Close the popup
+// //           onUpdate={updateCategory} // Update the category in the list
+// //         />
+// //       )}
+// //     </div>
+// //   );
+// // };
+
+// // export default AllCategories;
+// import React, { useState, useEffect } from "react";
+// import "./AllCategories.css";
+// import UpdatePopup from "./UpdatePopup";
+
+// const AllCategories = () => {
+//   const [categories, setCategories] = useState([]);
+//   const [isLoading, setIsLoading] = useState(true);
+//   const [selectedCategory, setSelectedCategory] = useState(null);
+
+//   // Fetch categories on component mount
+//   useEffect(() => {
+//     const fetchCategories = async () => {
+//       try {
+//         const response = await fetch("http://localhost:5000/api/add-new/categories");
+//         if (!response.ok) throw new Error("Failed to fetch categories");
+//         const data = await response.json();
+//         setCategories(data);
+//       } catch (error) {
+//         console.error("Error fetching categories:", error);
+//       } finally {
+//         setIsLoading(false);
+//       }
+//     };
+
+//     fetchCategories();
+//   }, []);
+
+//   // Delete a category by ID
+//   const deleteCategory = async (id) => {
+//     try {
+//       const response = await fetch(`http://localhost:5000/api/add-new/categories/${id}`, {
+//         method: "DELETE",
+//       });
+//       if (!response.ok) throw new Error("Failed to delete category");
+//       setCategories((prevCategories) => prevCategories.filter((category) => category._id !== id));
+//     } catch (error) {
+//       console.error("Error deleting category:", error);
+//     }
+//   };
+
+//   // Update category in the state
+//   const updateCategory = (updatedCategory) => {
+//     setCategories((prevCategories) =>
+//       prevCategories.map((category) =>
+//         category._id === updatedCategory._id ? updatedCategory : category
+//       )
+//     );
+//     setSelectedCategory(null); // Close the popup
+//   };
+
+//   // Handle Update button click
+//   const handleUpdateClick = (category) => {
+//     setSelectedCategory(category); // Set the category to be updated
+//   };
+
+//   if (isLoading) {
+//     return <div className="loadingI">Loading categories...</div>;
+//   }
+
+//   return (
+//     <div className="containerI">
+//       <h2 className="titleI">All Categories</h2>
+//       {categories.length === 0 ? (
+//         <p className="no-categoriesI">No categories available.</p>
+//       ) : (
+//         <div className="gridI">
+//           {categories.map((category) => (
+//             <div key={category._id} className="cardI">
+//               <img
+//                 src={category.category_icon}
+//                 alt={category.category_title}
+//                 className="card-imageI"
+//               />
+//               <div className="card-contentI">
+//                 <h3 className="card-titleI">{category.category_title}</h3>
+//                 <p className="card-descriptionI">{category.category_description}</p>
+//                 <div className="card-actionsI">
+//                   <button
+//                     onClick={() => handleUpdateClick(category)}
+//                     className="buttonI update-buttonI"
+//                   >
+//                     Update
+//                   </button>
+//                   <button
+//                     onClick={() => deleteCategory(category._id)}
+//                     className="buttonI delete-buttonI"
+//                   >
+//                     Delete
+//                   </button>
+//                 </div>
+//               </div>
+//             </div>
+//           ))}
+//         </div>
+//       )}
+
+//       {/* Show UpdatePopup if a category is selected */}
+//       {selectedCategory && (
+//         <UpdatePopup
+//           category={selectedCategory}
+//           onClose={() => setSelectedCategory(null)}
+//           onUpdate={updateCategory}
+//         />
+//       )}
+//     </div>
+//   );
+// };
+
+// export default AllCategories;
 import React, { useState, useEffect } from "react";
-import "./AllCategories.css"; // Import the custom CSS file
-import UpdatePopup from "./UpdatePopup"; // Import the UpdatePopup component
+import "./AllCategories.css";
+import UpdatePopup from "./UpdatePopup";
 
 const AllCategories = () => {
   const [categories, setCategories] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState(null);
 
+  // Fetch categories on component mount
   useEffect(() => {
     const fetchCategories = async () => {
       try {
         const response = await fetch("http://localhost:5000/api/add-new/categories");
+        if (!response.ok) throw new Error("Failed to fetch categories");
         const data = await response.json();
         setCategories(data);
       } catch (error) {
@@ -23,89 +237,65 @@ const AllCategories = () => {
     fetchCategories();
   }, []);
 
+  // Delete a category by ID
   const deleteCategory = async (id) => {
     try {
-      await fetch(`http://localhost:5000/api/add-new/categories/${id}`, {
+      const response = await fetch(`http://localhost:5000/api/add-new/categories/${id}`, {
         method: "DELETE",
       });
-      setCategories(categories.filter((category) => category._id !== id));
+      if (!response.ok) throw new Error("Failed to delete category");
+      setCategories((prevCategories) => prevCategories.filter((category) => category._id !== id));
     } catch (error) {
       console.error("Error deleting category:", error);
     }
   };
 
-  const updateCategory = async (updatedCategory) => {
-    try {
-        console.log(updateCategory)
-      // Make the PUT request to update the category
-      const response = await fetch(
-        `http://localhost:5000/api/add-new/categories/${updatedCategory._id}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            name: updatedCategory.category_title, // Assuming `category_title` is updated
-          }),
-        }
-      );
-  
-      if (!response.ok) {
-        throw new Error("Failed to update the category");
-      }
-  
-      const updatedData = await response.json();
-  
-      // Update the categories state
-      setCategories(
-        categories.map((category) =>
-          category._id === updatedData._id ? updatedData : category
-        )
-      );
-  
-      // Close the popup
-      setSelectedCategory(null);
-    } catch (error) {
-      console.error("Error updating category:", error);
-    }
+  // Update category in the state
+  const updateCategory = (updatedCategory) => {
+    setCategories((prevCategories) =>
+      prevCategories.map((category) =>
+        category._id === updatedCategory._id ? updatedCategory : category
+      )
+    );
+    setSelectedCategory(null); // Close the popup
   };
 
+  // Handle Update button click
   const handleUpdateClick = (category) => {
-    setSelectedCategory(category); // Open the update popup with the selected category
+    setSelectedCategory(category); // Set the category to be updated
   };
 
   if (isLoading) {
-    return <div className="loading">Loading categories...</div>;
+    return <div className="loadingI">Loading categories...</div>;
   }
 
   return (
-    <div className="container">
-      <h2 className="title">All Categories</h2>
+    <div className="containerI">
+      <h2 className="titleI">All Categories</h2>
       {categories.length === 0 ? (
-        <p className="no-categories">No categories available.</p>
+        <p className="no-categoriesI">No categories available.</p>
       ) : (
-        <div className="grid">
+        <div className="gridI">
           {categories.map((category) => (
-            <div key={category._id} className="card">
+            <div key={category._id} className="cardI">
               <img
                 src={category.category_icon}
                 alt={category.category_title}
-                className="card-image"
+                className="card-imageI"
               />
-              <div className="card-content">
-                <h3 className="card-title">{category.category_title}</h3>
-                <p className="card-description">{category.category_description}</p>
-                <div className="card-actions">
+              <div className="card-contentI">
+                <h3 className="card-titleI">{category.category_title}</h3>
+                <p className="card-descriptionI">{category.category_description}</p>
+                <div className="card-actionsI">
                   <button
                     onClick={() => handleUpdateClick(category)}
-                    className="button update-button"
+                    className="buttonI update-buttonI"
                   >
                     Update
                   </button>
                   <button
                     onClick={() => deleteCategory(category._id)}
-                    className="button delete-button"
+                    className="buttonI delete-buttonI"
                   >
                     Delete
                   </button>
@@ -120,8 +310,8 @@ const AllCategories = () => {
       {selectedCategory && (
         <UpdatePopup
           category={selectedCategory}
-          onClose={() => setSelectedCategory(null)} // Close the popup
-          onUpdate={updateCategory} // Update the category in the list
+          onClose={() => setSelectedCategory(null)}
+          onUpdate={updateCategory}
         />
       )}
     </div>

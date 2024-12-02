@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Line, Pie, Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, Title, Tooltip, Legend, ArcElement, CategoryScale, LinearScale, BarElement, LineElement, PointElement } from 'chart.js';
@@ -11,6 +12,7 @@ const serverURL = "http://localhost:5000";
 function AdminDashboard() {
   const [users, setUsers] = useState([]);
   const [orders, setOrders] = useState([]);
+  const [reviews, setReviews] = useState(0);
   const [error, setError] = useState(null);
 
   useEffect(() => {
@@ -53,33 +55,96 @@ function AdminDashboard() {
     fetchUsers();
     fetchOrders();
   }, []);
-  const handleDelete = async (email) => {
-    if (window.confirm(`Are you sure you want to delete the user with email: ${email}?`)) {
-      try {
-        const response = await fetch(`http://localhost:5000/api/user`, {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
+  const handleDelete = async (email, role) => {
+    // Prevent deleting Admin users
+    if (role === "Admin") {
+      toast.error("Admin cannot be deleted!", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        style: {
+          borderRadius: "8px",          // Rounded corners
+          backgroundColor: "#fff",     // White background
+          color: "#000",               // Black text for readability
+          boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)", // Subtle shadow
+        },
+      });
+      return; // Exit the function early
+    }
+  
+    try {
+      const response = await fetch(`http://localhost:5000/api/user`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email }),
+      });
+  
+      const data = await response.json();
+  
+      if (response.ok) {
+        toast.success(data.message || "User deleted successfully", {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          style: {
+            borderRadius: "8px",
+            backgroundColor: "#fff",    // White background
+            color: "#000",             // Black text for readability
+            boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)", // Subtle shadow
           },
-          body: JSON.stringify({ email }),
         });
-
-        const data = await response.json();
-
-        if (response.ok) {
-          toast.success(data.message || "User deleted successfully");
-          // Refetch the user list after deletion
-          // fetchUsers();
-          // fetchUsers();
-        } else {
-          toast.error(data.error || "Failed to delete user");
-        }
-      } catch (error) {
-        console.error("Error deleting user:", error);
-        toast.error("An error occurred while deleting the user");
+  
+        // Optionally refetch the user list or update the state
+        // fetchUsers();
+      } else {
+        toast.error(data.error || "Failed to delete user", {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          style: {
+            borderRadius: "8px",
+            backgroundColor: "#fff",    // White background
+            color: "#000",             // Black text for readability
+            boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)", // Subtle shadow
+          },
+        });
       }
+    } catch (error) {
+      console.error("Error deleting user:", error);
+      toast.error("An error occurred while deleting the user", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        style: {
+          borderRadius: "8px",
+          backgroundColor: "#fff",    // White background
+          color: "#000",             // Black text for readability
+          boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)", // Subtle shadow
+        },
+      });
     }
   };
+  
+  
+  
   const totalEarnings = orders.reduce((total, order) => {
     return total + (parseFloat(order.price) * parseInt(order.quantity));
   }, 0);
@@ -196,7 +261,7 @@ function AdminDashboard() {
                           <div className="row no-gutters align-items-center">
                             <div className="col mr-2">
                               <div className="text-xs font-weight-bold text-white text-uppercase mb-1">
-                                New Users
+                                Total Users
                               </div>
                               <div className="h5 mb-0 font-weight-bold text-white">{users.length}</div>
                             </div>
@@ -381,27 +446,26 @@ function AdminDashboard() {
             <tbody>
   {users.map((user) => (
     <tr key={user._id}>
-      <td style={{ border: "1px solid gray", padding: "10px" }}>{user.fullName}</td>
-      <td style={{ border: "1px solid gray", padding: "10px" }}>{user.email}</td>
-      <td style={{ border: "1px solid gray", padding: "10px" }}>{user.role}</td>
-      <td style={{ border: "1px solid gray", padding: "10px", textAlign: "center" }}>
+      <td>{user.fullName}</td>
+      <td>{user.email}</td>
+      <td>{user.role}</td>
+      <td style={{ textAlign: "center" }}>
         <button
-          onClick={() => handleDelete(user.email)}
+          onClick={() => handleDelete(user.email, user.role)}
           style={{
             border: "1px solid gray",
-            backgroundColor: "#007bff", // Same blue as header
-            color: "white",            // White text
-            padding: "5px 10px",       // Padding for spacing
-            borderRadius: "4px",       // Rounded corners for a polished look
-            cursor: "pointer",         // Pointer cursor for better UX
-            textAlign: "center",       // Center text within button
+            backgroundColor: "#007bff",
+            color: "white",
+            padding: "5px 10px",
+            borderRadius: "4px",
+            cursor: "pointer",
           }}
           onMouseOver={(e) => {
-            e.target.style.backgroundColor = "red"; // Highlight in red on hover
+            e.target.style.backgroundColor = "red";
             e.target.style.color = "white";
           }}
           onMouseOut={(e) => {
-            e.target.style.backgroundColor = "#007bff"; // Reset to blue
+            e.target.style.backgroundColor = "#007bff";
             e.target.style.color = "white";
           }}
         >
@@ -412,6 +476,7 @@ function AdminDashboard() {
   ))}
 </tbody>
 
+
           </table>
         </div>
       </div>
@@ -420,22 +485,132 @@ function AdminDashboard() {
 </div>
 
                 </div>
-                <div className="text-center mt-2"> {/* Reduced top margin from mt-4 to mt-2 */}
-  <a href="http://localhost:3000/admin/add-items" className="btn btn-primary" style={{ fontSize: '18px', padding: '12px 24px' }}>
-    Add New Items
-  </a>
-</div>
-                <div className="text-center mt-2"> {/* Reduced top margin from mt-4 to mt-2 */}
-  <a href="http://localhost:3000/admin/categories" className="btn btn-secondary" style={{ fontSize: '18px', padding: '12px 24px' }}>
-    All Categories info
-  </a>
-</div>
-                <div className="text-center mt-2"> {/* Reduced top margin from mt-4 to mt-2 */}
-  <a href="http://localhost:3000/admin/categories1" className="btn btn-primary" style={{ fontSize: '18px', padding: '12px 24px' }}>
-    All tems info
-  </a>
-</div>
+                <div className="row" style={{ justifyContent: "center", marginTop: "20px" }}>
+  <div className="col-auto">
+    <a
+      href="http://localhost:3000/admin/add-items"
+      className="btn btn-primary"
+      style={{
+        fontSize: "18px",
+        padding: "15px 30px",
+        width: "200px",
+        height: "60px",
+        backgroundColor: "#007bff",
+        color: "white",
+        textAlign: "center",
+        lineHeight: "30px", // Center text vertically
+        display: "block", // Make button a block-level element
+        borderRadius: "8px", // Rounded corners
+        textDecoration: "none",
+        transition: "background-color 0.3s ease, transform 0.2s ease", // Hover transitions
+      }}
+      onMouseOver={(e) => {
+        e.target.style.backgroundColor = "#0056b3"; // Darker blue on hover
+        e.target.style.transform = "scale(1.05)"; // Slight zoom effect
+      }}
+      onMouseOut={(e) => {
+        e.target.style.backgroundColor = "#007bff"; // Reset color
+        e.target.style.transform = "scale(1)"; // Reset scale
+      }}
+    >
+      Add New Items
+    </a>
+  </div>
 
+  <div className="col-auto">
+    <a
+      href="http://localhost:3000/admin/categories"
+      className="btn btn-secondary"
+      style={{
+      fontSize: "18px",
+        padding: "15px 30px",
+        width: "200px",
+        height: "60px",
+        backgroundColor: "#007bff",
+        color: "white",
+        textAlign: "center",
+        paddingLeft: "20px",
+        lineHeight: "30px", // Center text vertically
+        display: "block", // Make button a block-level element
+        borderRadius: "8px", // Rounded corners
+        textDecoration: "none",
+        transition: "background-color 0.3s ease, transform 0.2s ease",
+      }}
+      onMouseOver={(e) => {
+        e.target.style.backgroundColor = "#0056b3";
+        e.target.style.transform = "scale(1.05)";
+      }}
+      onMouseOut={(e) => {
+        e.target.style.backgroundColor = "#007bff";
+        e.target.style.transform = "scale(1)";
+      }}
+    >
+      All Categories Info
+    </a>
+  </div>
+
+  <div className="col-auto">
+    <a
+      href="http://localhost:3000/admin/categories1"
+      className="btn btn-primary"
+      style={{
+        fontSize: "18px",
+        padding: "15px 30px",
+        width: "200px",
+        height: "60px",
+        backgroundColor: "#007bff",
+        color: "white",
+        textAlign: "center",
+        lineHeight: "30px",
+        display: "block",
+        borderRadius: "8px",
+        textDecoration: "none",
+        transition: "background-color 0.3s ease, transform 0.2s ease",
+      }}
+      onMouseOver={(e) => {
+        e.target.style.backgroundColor = "#0056b3";
+        e.target.style.transform = "scale(1.05)";
+      }}
+      onMouseOut={(e) => {
+        e.target.style.backgroundColor = "#007bff";
+        e.target.style.transform = "scale(1)";
+      }}
+    >
+      All Items Info
+    </a>
+  </div>
+
+  <div className="col-auto">
+    <a
+      href="http://localhost:3000/admin/Review"
+      className="btn btn-primary"
+      style={{
+        fontSize: "18px",
+        padding: "15px 30px",
+        width: "200px",
+        height: "60px",
+        backgroundColor: "#007bff",
+        color: "white",
+        textAlign: "center",
+        lineHeight: "30px",
+        display: "block",
+        borderRadius: "8px",
+        textDecoration: "none",
+        transition: "background-color 0.3s ease, transform 0.2s ease",
+      }}
+      onMouseOver={(e) => {
+        e.target.style.backgroundColor = "#0056b3";
+        e.target.style.transform = "scale(1.05)";
+      }}
+      onMouseOut={(e) => {
+        e.target.style.backgroundColor = "#007bff";
+        e.target.style.transform = "scale(1)";
+      }}
+    >
+      All Reviews
+    </a>
+  </div>
+</div>
 
               </div>
             </div>

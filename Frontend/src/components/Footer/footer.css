@@ -6,91 +6,91 @@
     width: 100%;
     padding: 20px 0;
     margin-top: 10px;
-}
-
-.footer1 {
+  }
+  
+  .footer1 {
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 20px;
-}
-
-.footer1-grid {
+  }
+  
+  .footer1-grid {
     display: flex;
     flex-wrap: wrap;
     gap: 20px;
     justify-content: space-between;
-}
-
-.footer-list {
+  }
+  
+  .footer-list {
     flex: 1;
     min-width: 200px;
     margin-bottom: 20px;
-}
-
-.footer-list h4 {
+  }
+  
+  .footer-list h4 {
     font-size: 18px;
     margin-bottom: 15px;
     color: #f39c12;
-}
-
-.footer-list p a {
+  }
+  
+  .footer-list p a {
     color: #bdc3c7;
     text-decoration: none;
     font-size: 14px;
-}
-
-.footer-list p a:hover {
+  }
+  
+  .footer-list p a:hover {
     color: #ffffff;
     text-decoration: underline;
-}
-
-.social-media {
+  }
+  
+  .social-media {
     display: flex;
     gap: 15px;
-}
-
-.icon-img {
+  }
+  
+  .icon-img {
     width: 30px;
     height: 30px;
     transition: transform 0.3s ease;
-}
-
-.icon-img:hover {
+  }
+  
+  .icon-img:hover {
     transform: scale(1.1);
-}
-
-.newsletter-form,
-.feedback-form,
-.review-form {
+  }
+  
+  .newsletter-form,
+  .feedback-form,
+  .review-form {
     display: flex;
     flex-direction: column;
     gap: 8px;
     font-size: 13px;
-}
-
-.newsletter-form input,
-.feedback-form textarea,
-.review-form textarea {
+  }
+  
+  .newsletter-form input,
+  .feedback-form textarea,
+  .review-form textarea {
     padding: 8px;
     border: none;
     border-radius: 4px;
     font-size: 14px;
     width: 100%;
     resize: vertical;
-}
-
-.newsletter-form input {
+  }
+  
+  .newsletter-form input {
     height: 50px;
-}
-
-.feedback-form textarea,
-.review-form textarea {
+  }
+  
+  .feedback-form textarea,
+  .review-form textarea {
     height: 100px;
-}
-
-.newsletter-form button,
-.feedback-form button,
-.review-form button {
+  }
+  
+  .newsletter-form button,
+  .feedback-form button,
+  .review-form button {
     padding: 10px;
     border: none;
     background-color: #f39c12;
@@ -99,72 +99,86 @@
     cursor: pointer;
     border-radius: 4px;
     transition: background-color 0.3s ease;
-}
-
-.newsletter-form button:hover,
-.feedback-form button:hover,
-.review-form button:hover {
+  }
+  
+  .newsletter-form button:hover,
+  .feedback-form button:hover,
+  .review-form button:hover {
     background-color: #e67e22;
-}
-
-.rating {
+  }
+  
+  .rating {
     display: flex;
     gap: 5px;
     align-items: center;
     margin-bottom: 10px;
-}
-
-.rating .star {
+  }
+  
+  .rating .star {
     font-size: 24px;
     cursor: pointer;
     color: lightgray;
     transition: color 0.2s ease;
-}
-
-.rating .star.filled,
-.rating .star:hover {
+  }
+  
+  .rating .star.filled,
+  .rating .star:hover {
     color: gold;
-}
-
-.thank-you-message {
+  }
+  
+  .thank-you-message {
     margin-top: 10px;
     color: #f1c40f;
     font-size: 16px;
     font-weight: bold;
-}
-
-.footer2 {
+  }
+  
+  .footer2 {
     padding: 15px 0;
     display: flex;
     justify-content: center;
     border-top: 1px solid #2c2c2c;
     margin-top: 20px;
-}
-
-#copyright-txt {
+  }
+  
+  #copyright-txt {
     font-size: 14px;
     color: #bdc3c7;
-}
-
-/* Media Queries */
-@media screen and (max-width: 800px) {
+  }
+  
+  /* Error message styling */
+  .sign-in-error-message {
+    font-size: 16px;
+    font-weight: bold;
+    color: #dc3545;
+    background-color: #f8d7da;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #f5c6cb;
+    margin-top: 15px;
+    text-align: center;
+  }
+  
+  /* Media Queries */
+  @media screen and (max-width: 800px) {
     .footer1-grid {
-        flex-direction: column;
+      flex-direction: column;
     }
-}
-
-@media screen and (max-width: 600px) {
+  }
+  
+  @media screen and (max-width: 600px) {
     .footer-list {
-        min-width: 100%;
+      min-width: 100%;
     }
-
+  
     .social-media {
-        justify-content:center;
-}
-}
-.review-form input {
-    height: 60px; /* Increased height */
-    width: 100%; /* Reduced width */
+      justify-content: center;
+    }
+  }
+  
+  .review-form input {
+    height: 60px;
+    width: 100%;
     padding: 10px;
     border: none;
     border-radius: 4px;
@@ -175,5 +189,16 @@
   
   .review-form input:focus {
     box-shadow: 0 0 8px rgba(243, 156, 18, 0.5); /* Subtle glow effect on focus */
+  }
+  .admin-error-message {
+    font-size: 16px;
+    font-weight: bold;
+    color: #dc3545;
+    background-color: #f8d7da;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #f5c6cb;
+    margin-top: 15px;
+    text-align: center;
   }
   

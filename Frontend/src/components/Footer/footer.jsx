@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
+import { useUser } from '../userContext'; // Import the useUser hook to access the authentication context
 import './footer.css';
 import instagramIcon from '../../assets/instagram.svg';
 import facebookIcon from '../../assets/facebook.svg';
 import twitterIcon from '../../assets/twitter.svg';
 
 function Footer() {
+  const { user } = useUser(); // Access user information from the context
   const [email, setEmail] = useState('');
   const [reviewEmail, setReviewEmail] = useState(''); // State for email in review form
   const [review, setReview] = useState('');
@@ -12,6 +14,8 @@ function Footer() {
   const [hover, setHover] = useState(0);
   const [thankYouMessage, setThankYouMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const [signInErrorMessage, setSignInErrorMessage] = useState(''); // State for sign-in error message
+  const [adminErrorMessage, setAdminErrorMessage] = useState(''); // State for admin review error message
 
   // Newsletter form submission
   const handleNewsletterSubmit = (e) => {
@@ -34,6 +38,24 @@ function Footer() {
   const handleReviewSubmit = async (e) => {
     e.preventDefault();
 
+    // Check if the entered email is 'johnadmin@gmail.com'
+    if (reviewEmail === 'johnadmin@gmail.com' || reviewEmail === 'admine.com') {
+      setAdminErrorMessage('Admins cannot submit reviews.');
+      setSignInErrorMessage('');
+      setThankYouMessage('');
+      setErrorMessage('');
+      return;
+    }
+
+    // Check if the user is authenticated
+    if (!user) {
+      setErrorMessage('');
+      setThankYouMessage('');
+      setSignInErrorMessage('Please sign in to submit a review.');
+      return;
+    }
+
+    // Validate review email and review content
     if (!reviewEmail || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(reviewEmail)) {
       setErrorMessage('Please enter a valid email address.');
       return;
@@ -55,6 +77,7 @@ function Footer() {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          Authorization: `Bearer ${user.token}`, // Include token for authentication
         },
         body: JSON.stringify(reviewData),
       });
@@ -66,6 +89,8 @@ function Footer() {
         setReview('');
         setRating(0);
         setThankYouMessage('Thanks for your feedback!');
+        setSignInErrorMessage('');
+        setAdminErrorMessage('');
         setErrorMessage('');
         setTimeout(() => setThankYouMessage(''), 3000);
       } else {
@@ -158,7 +183,7 @@ function Footer() {
                 })}
               </div>
               <textarea
-                placeholder="Share your thoughts about our products"
+                placeholder="Share your thoughts about our website"
                 value={review}
                 onChange={(e) => setReview(e.target.value)}
                 required
@@ -168,6 +193,8 @@ function Footer() {
 
             {thankYouMessage && <p className="thank-you-message">{thankYouMessage}</p>}
             {errorMessage && <p className="error-message">{errorMessage}</p>}
+            {signInErrorMessage && <p className="sign-in-error-message">{signInErrorMessage}</p>} {/* Display the error message */}
+            {adminErrorMessage && <p className="admin-error-message">{adminErrorMessage}</p>} {/* Display admin review error */}
           </div>
         </div>
       </div>

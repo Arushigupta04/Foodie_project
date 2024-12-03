@@ -3,7 +3,7 @@ import "./signup.css";
 import SignUpImage from "../../assets/register.jpg";
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { FaEye, FaEyeSlash } from 'react-icons/fa'; // Import eye icons
+// import { FaEye, FaEyeSlash } from 'react-icons/fa'; // Import eye icons
 
 const serverURL = "http://localhost:5000";
 

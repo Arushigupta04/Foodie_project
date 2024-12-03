@@ -20,6 +20,7 @@ import AllCategories1 from './components/Items/AllCategories1.jsx';
 import { useCookies } from 'react-cookie';
 import Reviews from './components/Items/Reviews.jsx';
 import AllrectOrder from './components/Items/AllrectOrder.jsx';
+import AllPayments from './components/Items/AllPayments.jsx';
 
 function App() {
   const [cookies] = useCookies(['token']);
@@ -175,6 +176,16 @@ function App() {
       <ProtectedRoute isAdminRoute={true}>
       <>
       <AllrectOrder/><Footer />
+      </>
+      </ProtectedRoute>
+    } 
+  />
+  <Route 
+    path="/admin/alpay" 
+    element={
+      <ProtectedRoute isAdminRoute={true}>
+      <>
+      <AllPayments/><Footer />
       </>
       </ProtectedRoute>
     } 

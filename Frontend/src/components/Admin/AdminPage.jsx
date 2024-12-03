@@ -612,7 +612,7 @@ function AdminDashboard() {
 
   <div className="col-auto">
     <a
-      href="http://localhost:5000/admin/alrect"
+      href="http://localhost:3000/admin/alrect"
       className="btn btn-primary"
       style={{
         fontSize: "18px",
@@ -638,6 +638,36 @@ function AdminDashboard() {
       }}
     >
       All Recent order
+    </a>
+  </div>
+  <div className="col-auto">
+    <a
+      href="http://localhost:3000/admin/alpay"
+      className="btn btn-primary"
+      style={{
+        fontSize: "18px",
+        padding: "15px 30px",
+        width: "200px",
+        height: "60px",
+        backgroundColor: "#007bff",
+        color: "white",
+        textAlign: "center",
+        lineHeight: "30px",
+        display: "block",
+        borderRadius: "8px",
+        textDecoration: "none",
+        transition: "background-color 0.3s ease, transform 0.2s ease",
+      }}
+      onMouseOver={(e) => {
+        e.target.style.backgroundColor = "#0056b3";
+        e.target.style.transform = "scale(1.05)";
+      }}
+      onMouseOut={(e) => {
+        e.target.style.backgroundColor = "#007bff";
+        e.target.style.transform = "scale(1)";
+      }}
+    >
+      All Payment
     </a>
   </div>
 

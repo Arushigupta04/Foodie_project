@@ -579,6 +579,7 @@ function AdminDashboard() {
       All Items Info
     </a>
   </div>
+<<<<<<< HEAD
   <div className="col-auto">
     <a
       href="http://localhost:3000/admin/categories1"
@@ -671,6 +672,8 @@ function AdminDashboard() {
     </a>
   </div>
 
+=======
+>>>>>>> cbf5890e020779475066abe4027a5b702e2cb306
 
   <div className="col-auto">
     <a
